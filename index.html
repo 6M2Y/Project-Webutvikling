@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!----to manage sounds-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js" 
+    integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA=="
+     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        body{
+            margin: 0px;
+        }
+
+        .title h1
+        {
+            letter-spacing: 10px;
+            font-size: 40px;
+            text-align: center;
+            margin-top: 80px;
+        }
+        .container
+        {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 100px;
+        }
+       .left
+        {
+            font-size: 25px;
+            padding: 10px;
+            letter-spacing: 5px;
+            background-color: aquamarine;
+            width: 20%;
+            margin: 1rem;
+            height: 50%;
+        }
+        #left-text
+        {
+            letter-spacing: .8em;
+            padding-left: 10px;;
+        }
+        #hitletter
+        {
+            margin-top: 40px;
+        }
+
+        #hit-letter-display
+        {
+            list-style-type: none;
+        }
+        #hit-letter-display li{
+            float: left;
+        }
+        .score, .lives
+        {
+            margin-left: 30px;
+            font-size: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .score #scoreEl
+        {
+            padding-left: 10px;
+            width: 100px;
+        }
+        .right
+        {
+            width: 20%;
+            background-color: aquamarine;
+            margin: 1rem;
+            height: 50%;
+        }
+    </style>
+</head>
+<body> 
+    <div class="title">
+        <h1>Letter Shooter Game</h1>
+    </div>
+    
+    <div class="container">
+        <div class="left"> 
+          <div>
+
+          </div>
+                <span>Ord </span>
+                <p id="ord-text"></p>
+            </section>
+            <section>
+                <div>
+                    <ul id="hit-letter-display"></ul>
+                </div>
+            </section>
+        </div>
+        
+        <div>
+            <canvas id="canvas"> </canvas>
+        </div>
+
+        <div class="right">
+            <div class="lives">
+                <span>Lives </span> 
+                <p id="liveScore">0</p> 
+            </div>
+            <div class="score">
+                <span>Score </span> 
+                <p id="scoreEl">000</p> 
+            </div>
+        </div>
+    </div>
+   
+
+    <script src="index.js"></script>
+</body>
+</html>
