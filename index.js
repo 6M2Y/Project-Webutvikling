@@ -124,10 +124,38 @@ class Particle{
        this.draw();
        this.position.x += this.velocity.x;
        this.position.y += this.velocity.y;
-
        this.opcity -= 0.02;
     }
    }
+
+//flying scores
+
+class FlyingScore
+{
+    constructor({position}, score, color)
+    {
+        this.position = position;
+        this.score = score;
+        this.opacity = 1;
+        this.color = color;
+    }
+    
+    drawScore()
+    {
+        c.save();
+        c.globalAlpha = this.opacity;
+        c.font ="40px Arial";
+        c.fillStyle = this.color;
+        c.fillText(`${this.score}`, this.position.x, this.position.y);
+        c.restore();
+    }
+    update()
+    {
+        this.drawScore();
+        this.position.y -= 1.2;
+        this.opacity -= 0.04;
+    }
+}
 
 class Bokstav
 {
@@ -230,7 +258,6 @@ let music = {
     })
 }
 
-
 let player = new Player() //start game
 
 function generateRandomPosition() {
@@ -289,6 +316,7 @@ let score = 0;
 let frameLoop;
 
 //bgsound.play();
+let flyingScoreHolder = [];
 
 function animate()
 {
@@ -312,6 +340,19 @@ function animate()
                 else
                 {
                     particle.update();
+                }
+            })
+
+        //flying score
+        flyingScoreHolder.forEach((score, score_index) =>
+            {
+                if(score.opacity <= 0)
+                {
+                    flyingScoreHolder.splice(score_index, 1);
+                }
+                else
+                {
+                    score.update();
                 }
             })
         //projectile movement
@@ -369,9 +410,29 @@ function animate()
                                 color: '#6c584c'
                         }))
                         }
+                        
                         //check the hit letter is included in the letters of ord[level]
                         let isHit = ord[level].includes(bokstav.text);
                         createHitLetterList(bokstav.text, isHit);
+
+                        if(isHit)
+                        {
+                            flyingScoreHolder.push(new FlyingScore({
+                                position:{
+                                    x: bokstav.position.x,
+                                    y: bokstav.position.y
+                                }
+                            }, '+5', 'green'))
+                        }
+                        else
+                        {
+                            flyingScoreHolder.push(new FlyingScore({
+                                position:{
+                                    x: bokstav.position.x,
+                                    y: bokstav.position.y
+                                }
+                            }, '-5', 'red'))
+                        }
 
                         scoreEl.innerHTML = score;
                         //remove bokstav and projectile at their respective index
@@ -380,7 +441,7 @@ function animate()
                     //}, 0);
                 }
             });
-
+            
             // gameover condition 1. the 
             if(letterBottom > canvas.height || lives <= 0 )
             {
@@ -388,9 +449,7 @@ function animate()
                 cancelAnimationFrame(frameLoop); //pauses the game
                 pointStartgamePage.innerHTML = score;
                 startWindow.style.display = 'flex'; 
-                
             }
-
         })
 //displaying the hitted letters on the page
 //hit.innerHTML += hitLetter;
