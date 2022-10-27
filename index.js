@@ -8,9 +8,6 @@ const startBtn = document.getElementById("startBtn");
 const startWindow = document.getElementById('startGameWindow');
 const pointStartgamePage = document.getElementById("point");
 
-
-
-
 const c = canvas.getContext('2d'); // canvas context
 //canvas dimension
 
@@ -58,7 +55,6 @@ class Player
             }
             this.image = img;
         }
-        
     }
     draw()
         {
@@ -129,7 +125,6 @@ class Particle{
    }
 
 //flying scores
-
 class FlyingScore
 {
     constructor({position}, score, color)
@@ -272,7 +267,6 @@ function generateRandomPosition() {
     }
 }
 
-
 function letterContainer() {
     text_holder.forEach((bokstav, index) => {
         bokstaver.push(new Bokstav(
@@ -285,7 +279,6 @@ function letterContainer() {
         console.log("letter: " + bokstav +" , " + randomSpawnPos[index].x + " , " + randomSpawnPos[index].y);
     });
 }
-
 function init()
 {
      bokstaver =[];
@@ -449,11 +442,14 @@ function animate()
                 cancelAnimationFrame(frameLoop); //pauses the game
                 pointStartgamePage.innerHTML = score;
                 startWindow.style.display = 'flex'; 
+                //stop the bgsound
+                if(music.bgSound.play)
+                    {
+                        music.bgSound.stop();
+                    }
             }
         })
-//displaying the hitted letters on the page
-//hit.innerHTML += hitLetter;
-        //sjekk om right key pressed og så lenge det er innen doc.width
+
         if(key.righKey.isPressed && (player.position.x + player.width <= canvas.width))
             {
                 player.velocity.x = 5;
@@ -469,17 +465,11 @@ function animate()
     }
 }
 
-// animate();
-
-//creating list for hitted list
 let countletter_hit = 0;//counts the correct letter hit
-function createHitLetterList(letter, isIncluded)
+function createHitLetterList(letter, isCorretLetterHit)
 {
-    var li = document.createElement('li');
-    li.appendChild(document.createTextNode(letter));
-    if(isIncluded)
+    if(isCorretLetterHit)
     { 
-        li.style.color = 'green';
         sfx.hitSound.play();
         countletter_hit+=1;
         //if 
@@ -498,7 +488,6 @@ function createHitLetterList(letter, isIncluded)
     }
     else
     { //wrong letter hit
-        li.style.color = 'red';
         score -=5;
         lives--;
         livesText.innerHTML = lives;
@@ -506,7 +495,6 @@ function createHitLetterList(letter, isIncluded)
         
         // buzzSound.stop();
     }
-    hitList.appendChild(li);
 }
 //her kontroller vi key state
 
@@ -566,5 +554,10 @@ startBtn.addEventListener('click', () =>
     scoreEl.innerHTML = score;
     livesText.innerHTML = lives;
     init();
+    if(music.bgSound.play)
+    {
+        music.bgSound.stop();
+    }
+    music.bgSound.play();
     startWindow.style.display = 'none';
 })
