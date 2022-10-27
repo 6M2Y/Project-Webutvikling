@@ -1,8 +1,15 @@
 const canvas = document.getElementById("canvas"); //canvas api
 const ordText = document.getElementById("ord-text"); 
 const hitList = document.getElementById("hit-letter-display");
-const scoreEl = document.getElementById("scoreEl");liveScore
+const scoreEl = document.getElementById("scoreEl");
 const livesText = document.getElementById("liveScore");
+const levelText = document.getElementById("levelScore");
+const startBtn = document.getElementById("startBtn");
+const startWindow = document.getElementById('startGameWindow');
+const pointStartgamePage = document.getElementById("point");
+
+
+
 
 const c = canvas.getContext('2d'); // canvas context
 //canvas dimension
@@ -10,7 +17,8 @@ const c = canvas.getContext('2d'); // canvas context
 canvas.width = 900,
 canvas.height = 500;
 
-let level = 0;
+//can be added in the start btn click
+let level = 4;
 let lives = 5;
 
 let ord =[
@@ -20,65 +28,14 @@ let ord =[
     "SNØ","SKI", "STA","LUE","IS", "FRU",
 ]
 
-let bokstav = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','Æ','Ø','Å'];
+let alphabets = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','Æ','Ø','Å'];
+
 let text_holder = []; // must be included in init function
-//function start here
+let randomSpawnPos = [];
+let bokstaver =[];
+let projectiles = [];
+let particles = [];
 
-function awake(level)
-{
-ordText.innerHTML = ord[level]; // display the word at index level on the page
-livesText.innerHTML = lives; //assigning lives
-
-text_holder = ord[level].split(''); // split the sting at ord[level] to array
-
-let uniq_characters = bokstav.filter((e)=> text_holder.indexOf(e) === -1); //characters otherthan ord[level]...dummy letters other than the letter in the selected word
-
-//how many dummy letters 
-let numberOfDummyletters = Math.floor(Math.random() * 5) + 2;
-for (let index = 0; index < numberOfDummyletters; index++) {
-    text_holder.push(uniq_characters[Math.floor(Math.random() * uniq_characters.length)])
-}
-console.log("letters " + numberOfDummyletters);
-//shuffle the letters position in the array, to make them appear randomly
-shuffleArray(text_holder); 
-}
-
-awake(level); // this can be called with start game btn
-
-function shuffleArray(array) {
-        for (var i = array.length - 1; i > 0; i--) {
-            var j = Math.floor(Math.random() * (i + 1));
-            var temp = array[i];
-            array[i] = array[j];
-            array[j] = temp;
-        }
-    }
-//end function
-
-
-// howl sound
-
-let sfx = {
-    //sfx sounds
-    hitSound : new Howl({
-        src:'./snd/explosion.wav',
-    }),
-    missSound : new Howl({
-        src:'./snd/buzz.wav',
-    }),
-    shootSound : new Howl({
-        src:'./snd/shoot.wav',
-    })
-}
-
-let music = {
-    //background sound
-    bgSound : new Howl({
-        src: './snd/bgsound.mp3'
-    })
-}
-
-//player class
 class Player
 {
     constructor()
@@ -101,6 +58,7 @@ class Player
             }
             this.image = img;
         }
+        
     }
     draw()
         {
@@ -201,44 +159,125 @@ class Bokstav
     update({velocity})
     {
             this.draw();
-            // this.position.x += velocity.x; // every frame add the x axis
             this.position.y += velocity.y; // every frame add the y axis
-  
     }
 }
 
-const randomSpawnPos = [2];
-let xPos = 0,
-    length = text_holder.length; //cache the length
-let xStartPos = 50,
-      xConstant = canvas.width/length;
-let size = 0;
+function awake(level)
+{
+    ordText.innerHTML = ord[level]; // display the word at index level on the page
+    livesText.innerHTML = lives; //assigning lives
+    levelText.innerHTML = level +1; 
 
-while (size < length) {
-    randomSpawnPos[size] = {x: xStartPos, y : Math.floor(Math.random() * - 40 )}
-    size++;
-    xStartPos+=xConstant;
+    text_holder = ord[level].split(''); // split the sting at ord[level] to array
+    // console.log("letters "+text_holder);
+
+    let uniq_characters = alphabets.filter((e)=> text_holder.indexOf(e) === -1); //characters otherthan ord[level]...dummy letters other than the letter in the selected word
+
+    //how many dummy letters 
+    let numberOfDummyletters = Math.floor(Math.random() * 5) + 2;
+
+    for (let index = 0; index < numberOfDummyletters; index++) 
+        {
+            text_holder.push(
+                uniq_characters[Math.floor(
+                Math.random() * uniq_characters.length
+                )])
+        }
+  
+    //shuffle the letters position in the array, to make them appear randomly
+    shuffleArray(text_holder); 
+    generateRandomPosition();
+    letterContainer();
+
+    //test
+// console.log("text_holder" + text_holder)
+// for (let index = 0; index < randomSpawnPos.length; index++) {
+// //     console.log( "level: " + level + " x: " +randomSpawnPos[index].x + "y : "+ randomSpawnPos[index].y)
+// }
+    // console.log("2 letters "+text_holder);
 }
 
-const bokstaver =[];
+//  awake(level); // this can be called with start game btn
+
+function shuffleArray(array) {
+        for (var i = array.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+    }
+//end function
+
+// howl sound
+let sfx = {
+    //sfx sounds
+    hitSound : new Howl({
+        src:'./snd/explosion.wav',
+    }),
+    missSound : new Howl({
+        src:'./snd/buzz.wav',
+    }),
+    shootSound : new Howl({
+        src:'./snd/shoot.wav',
+    })
+}
+let music = {
+    //background sound when click start game
+    bgSound : new Howl({
+        src: './snd/bgsound.mp3'
+    })
+}
+
+
+let player = new Player() //start game
+
+function generateRandomPosition() {
+    let xPos = 0, length = text_holder.length; //cache the length
+    let xStartPos = 50, xConstant = canvas.width / length;
+    let size = 0;
+
+    while (size < length) {
+        randomSpawnPos[size] = { x: xStartPos, y: Math.floor(Math.random() * -40) };
+        size++;
+        xStartPos += xConstant;
+    }
+}
+
+
+function letterContainer() {
+    text_holder.forEach((bokstav, index) => {
+        bokstaver.push(new Bokstav(
+            {
+                position: { x: randomSpawnPos[index].x, y: randomSpawnPos[index].y },
+                //position:{ x: randomSpawnPos[index], y: -10},
+                text: bokstav
+            }
+        ));
+        console.log("letter: " + bokstav +" , " + randomSpawnPos[index].x + " , " + randomSpawnPos[index].y);
+    });
+}
+
+function init()
+{
+     bokstaver =[];
+     player = new Player() //start game
+     projectiles = [];
+     text_holder = [];
+     particles = [];
+     randomSpawnPos = []; 
+     awake(level);
+     
+     //to avoid stacking recursion of animate
+     if(frameLoop)
+     {
+        cancelAnimationFrame(frameLoop)
+     }
+     animate();
+}
 
 //consider this in init()
-text_holder.forEach((bokstav, index) =>
-{
-    bokstaver.push(new Bokstav(
-    {
-        position : {x: randomSpawnPos[index].x, y: randomSpawnPos[index].y},
-        //position:{ x: randomSpawnPos[index], y: -10},
-        text : bokstav
-    }
-    ))
-    console.log(randomSpawnPos[index].x + " , "+ randomSpawnPos[index].y) //to be deleted
-})
-
-const player = new Player() //start game
-const projectiles = [];
-const particles = [];
-
 //key states
 const key = {
     righKey : { isPressed : false},
@@ -247,12 +286,13 @@ const key = {
 }
 
 let score = 0;
+let frameLoop;
 
 //bgsound.play();
 
 function animate()
 {
-    requestAnimationFrame(animate)
+   frameLoop = requestAnimationFrame(animate)
     {
         //black screen
         c.fillStyle = '#e9edc9'
@@ -345,6 +385,10 @@ function animate()
             if(letterBottom > canvas.height || lives <= 0 )
             {
                 console.log("gameover");
+                cancelAnimationFrame(frameLoop); //pauses the game
+                pointStartgamePage.innerHTML = score;
+                startWindow.style.display = 'flex'; 
+                
             }
 
         })
@@ -355,7 +399,7 @@ function animate()
             {
                 player.velocity.x = 5;
             }
-        else if(key.leftKey.isPressed && player.position.x >= 0)
+        else if(key.leftKey.isPressed && (player.position.x >= 0))
             {
                 player.velocity.x = -5;
             }
@@ -366,10 +410,10 @@ function animate()
     }
 }
 
-animate();
+// animate();
 
 //creating list for hitted list
-var countletter_hit = 0;//counts the correct letter hit
+let countletter_hit = 0;//counts the correct letter hit
 function createHitLetterList(letter, isIncluded)
 {
     var li = document.createElement('li');
@@ -382,8 +426,14 @@ function createHitLetterList(letter, isIncluded)
         //if 
         if(countletter_hit === ord[level].length)
         {
+            //deactivate the keys til the player image loads
+            key.leftKey.isPressed = false;
+            key.righKey.isPressed = false;
+
             level += 1; //increent the level
-            ordText.innerHTML = ord[level];
+            init();
+           // animate();
+            countletter_hit = 0 //reset the number of hit counts
         }
         score +=10;
     }
@@ -447,4 +497,15 @@ addEventListener('keyup', (event) =>
             key.space.isPressed = false;
             break;
     }
+})
+
+startBtn.addEventListener('click', () =>
+{
+    level = 4;
+    lives = 5;
+    score = 0;
+    scoreEl.innerHTML = score;
+    livesText.innerHTML = lives;
+    init();
+    startWindow.style.display = 'none';
 })

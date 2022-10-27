@@ -28,12 +28,13 @@
             align-items: center;
             margin-top: 100px;
         }
-       .left
+       .left, .right
         {
             font-size: 25px;
+            color: #fff;
             padding: 10px;
             letter-spacing: 5px;
-            background-color: aquamarine;
+            background-color: #264653;
             width: 20%;
             margin: 1rem;
             height: 50%;
@@ -55,7 +56,7 @@
         #hit-letter-display li{
             float: left;
         }
-        .score, .lives
+        .score, .lives, .level
         {
             margin-left: 30px;
             font-size: 20px;
@@ -66,20 +67,58 @@
             padding-left: 10px;
             width: 100px;
         }
-        .right
-        {
-            width: 20%;
-            background-color: aquamarine;
-            margin: 1rem;
-            height: 50%;
+       
+        /* start game page*/
+        .startgame{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            
         }
+        .innerstartgame
+        {
+            background: #e9c46a;
+            padding: 2rem;
+            width: 20%;
+            text-align: center;
+        }
+        .point
+        {
+            font-size: 40px;
+        }
+        .pointText
+        {
+            font-size: small;
+        }
+        .starbtn
+        {
+            width: 75%;
+            font-size: 25px;
+            border-radius: 13px;
+        }
+
     </style>
 </head>
 <body> 
     <div class="title">
         <h1>Letter Shooter Game</h1>
     </div>
-    
+    <!----start game-->
+    <div class="startgame" id="startGameWindow">
+        <div class="innerstartgame">
+            <h1 id="point">0</h1>
+            <p class="pointText">Points</p>
+            <div>
+                <button class="starbtn" id="startBtn">Start Game</button>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="left"> 
           <div>
@@ -100,6 +139,10 @@
         </div>
 
         <div class="right">
+            <div class="level">
+                <span>Level </span> 
+                <p id="levelScore">0</p> 
+            </div>
             <div class="lives">
                 <span>Lives </span> 
                 <p id="liveScore">0</p> 
