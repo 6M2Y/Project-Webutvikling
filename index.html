@@ -46,7 +46,6 @@
             display: flex;
             width: 200px;
             justify-content: space-around;
-    
         }
 
         .ord
@@ -84,13 +83,20 @@
         }
         .pointText
         {
-            font-size: small;
+            font-size: 30px;
+            margin: 0px;
         }
         .starbtn
         {
-            width: 75%;
+            width: 55%;
             font-size: 25px;
             border-radius: 13px;
+        }
+        .difficultylvl
+        {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
         }
 
     </style>
@@ -102,8 +108,23 @@
     <!----start game-->
     <div class="startgame" id="startGameWindow">
         <div class="innerstartgame">
+            <p class="pointText">Score</p>
             <h1 id="point">0</h1>
-            <p class="pointText">Points</p>
+            <div class="difficultylvl">
+                 <div>
+                    <label for="cars">Difficulty:</label>
+                </div>
+
+                <div>
+                    <select name="cars" id="levelDifficulty">
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                      </select>
+                </div>
+            </div>
+               
+            
             <div>
                 <button class="starbtn" id="startBtn">Start Game</button>
             </div>
@@ -130,6 +151,7 @@
                     <div><span>Score </span> </div>
                     <div id="scoreEl">000</div> 
             </div>
+            
         </div>
 
         <div>

@@ -7,6 +7,7 @@ const levelText = document.getElementById("levelScore");
 const startBtn = document.getElementById("startBtn");
 const startWindow = document.getElementById('startGameWindow');
 const pointStartgamePage = document.getElementById("point");
+const difficultyLevel = document.getElementById("levelDifficulty")
 
 const c = canvas.getContext('2d'); // canvas context
 //canvas dimension
@@ -15,7 +16,7 @@ canvas.width = 900,
 canvas.height = 500;
 
 //can be added in the start btn click
-let level = 4;
+let level = 0;
 let lives = 5;
 
 let ord =[
@@ -32,6 +33,7 @@ let randomSpawnPos = [];
 let bokstaver =[];
 let projectiles = [];
 let particles = [];
+let ySpeed = 1; //the speed of falling letters
 
 class Player
 {
@@ -156,11 +158,7 @@ class Bokstav
 {
     constructor({position, text})
     {
-        this.velocity =
-        {
-            x:0,
-            y:0
-        }
+        this.velocity = { y:0 }
         this.text = text;
         this.position = {
                 x: position.x,
@@ -198,7 +196,7 @@ function awake(level)
     let uniq_characters = alphabets.filter((e)=> text_holder.indexOf(e) === -1); //characters otherthan ord[level]...dummy letters other than the letter in the selected word
 
     //how many dummy letters 
-    let numberOfDummyletters = Math.floor(Math.random() * 5) + 2;
+    let numberOfDummyletters = Math.floor(Math.random() * 5) + 1;
 
     for (let index = 0; index < numberOfDummyletters; index++) 
         {
@@ -233,7 +231,7 @@ function shuffleArray(array) {
     }
 //end function
 
-// howl sound
+// howl.js for sound system
 let sfx = {
     //sfx sounds
     hitSound : new Howl({
@@ -256,12 +254,13 @@ let music = {
 let player = new Player() //start game
 
 function generateRandomPosition() {
-    let xPos = 0, length = text_holder.length; //cache the length
-    let xStartPos = 50, xConstant = canvas.width / length;
-    let size = 0;
+    let length = text_holder.length; //cache the length
+    let xStartPos = 50, //xPos offset
+        xConstant = canvas.width / length, //dividing the canvas width by the number of letters which will be used as a gap 
+        size = 0;
 
     while (size < length) {
-        randomSpawnPos[size] = { x: xStartPos, y: Math.floor(Math.random() * -40) };
+        randomSpawnPos[size] = { x: xStartPos, y: Math.floor(Math.random() * -60) }; 
         size++;
         xStartPos += xConstant;
     }
@@ -289,7 +288,7 @@ function init()
      randomSpawnPos = []; 
      awake(level);
      
-     //to avoid stacking recursion of animate
+     //to avoid stacking, recursion of animate
      if(frameLoop)
      {
         cancelAnimationFrame(frameLoop)
@@ -365,10 +364,15 @@ function animate()
             }
         })
 
+        //adjust speed
+       
+        // if(level > 2)
+        //     ySpeed += 2;
+
         //the bone of the game logic
         bokstaver.forEach((bokstav, bokstav_index) =>
         {
-            bokstav.update({velocity:{ x:0, y: Math.random() * 1.2}}); //if we want to accelerate with level, it has to be done here
+            bokstav.update({velocity:{ y: Math.random() * ySpeed}}); //if we want to accelerate with level, it has to be done here
             
             //collision detection from msdn           
             let letterleft = bokstav.position.x,
@@ -438,7 +442,6 @@ function animate()
             // gameover condition 1. the 
             if(letterBottom > canvas.height || lives <= 0 )
             {
-                console.log("gameover");
                 cancelAnimationFrame(frameLoop); //pauses the game
                 pointStartgamePage.innerHTML = score;
                 startWindow.style.display = 'flex'; 
@@ -480,7 +483,10 @@ function createHitLetterList(letter, isCorretLetterHit)
             key.righKey.isPressed = false;
 
             level += 1; //increent the level
-            init();
+            setTimeout(() => {
+                init();
+            }, 1000);
+           // init();
            // animate();
             countletter_hit = 0 //reset the number of hit counts
         }
@@ -546,9 +552,10 @@ addEventListener('keyup', (event) =>
     }
 })
 
+//when the start btn is clicked
 startBtn.addEventListener('click', () =>
 {
-    level = 4;
+    level = 0;
     lives = 5;
     score = 0;
     scoreEl.innerHTML = score;
@@ -559,5 +566,24 @@ startBtn.addEventListener('click', () =>
         music.bgSound.stop();
     }
     music.bgSound.play();
-    startWindow.style.display = 'none';
+    startWindow.style.display = 'none'; //disappear the window of start/end game
+})
+
+difficultyLevel.addEventListener('change', () =>
+{
+    switch(difficultyLevel.value)
+    {
+        case 'easy':
+            ySpeed = 1;
+            break;
+        case 'medium':
+            ySpeed = 1.5;
+            break;
+        case 'hard':
+            ySpeed = 2;
+            break
+        default:
+            break;
+    }
+
 })
