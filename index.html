@@ -36,7 +36,7 @@
             color: #fff;
             padding: 10px;
             letter-spacing: 5px;
-            background-color: #264653;
+            background-color: #989ea0;
             width: 900px;
             margin: 1rem;
             height: 10%;
@@ -50,7 +50,25 @@
 
         .ord
         {
-            width: 60px;
+            width: 80px;
+            background: rgb(255, 0, 64);
+            border-radius: 5%;
+            color: #fff;
+            font-size: 20px;
+            text-align: center;
+            padding: 5px 10px;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            animation: animate 3s linear infinite;
+                }
+        @keyframes animate 
+        {
+            0% {
+                box-shadow: 0 0 0 0px rgba(255, 0, 64, 0.7), 0 0 0 0 rgba(255, 0, 64, 0.7);
+            }
+            80% {
+                box-shadow: 0 0 0 15px rgba(255, 0, 64, 0), 0 0 0 0 rgba(255, 0, 64, 0.7);
+            }
+          
         }
         .score #scoreEl
         {
@@ -114,7 +132,6 @@
                  <div>
                     <label for="cars">Difficulty:</label>
                 </div>
-
                 <div>
                     <select id="levelDifficulty">
                         <option value="easy">Easy</option>
@@ -123,15 +140,12 @@
                       </select>
                 </div>
             </div>
-               
-            
             <div>
                 <button class="starbtn" id="startBtn">Start Game</button>
             </div>
         </div>
     </div>
     <!----end start game-->
-
     <div class="container">
         <div class="top"> 
             <div class="top-1">
@@ -151,15 +165,11 @@
                     <div><span>Score </span> </div>
                     <div id="scoreEl">000</div> 
             </div>
-            
         </div>
-
         <div>
             <canvas id="canvas"> </canvas>
         </div>
     </div>
-   
-
     <script src="index.js"></script>
 </body>
 </html>

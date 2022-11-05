@@ -23,7 +23,8 @@ let ord =[
     "HEI", "JA", "DU", "MEG", "HER", "VI", "HVIS", "NÅ",
      "JO", "DET", "KAN", "SNU", "DRA", "KØ", "SPØR", "PC",
     "FRA", "FLY", "SAK", "STI","SPA","HUS","TRO",
-    "SNØ","SKI", "STA","LUE","IS", "FRU",
+    "SNØ","SKI", "STA","LUE","IS", "FRU","DET", "KAN", "SNU", "DRA", "KØ", "SPØR", "PC",
+    "FRA", "FLY", "SAK", "STI","SPA"
 ]
 
 let alphabets = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','Æ','Ø','Å'];
@@ -136,7 +137,6 @@ class FlyingScore
         this.opacity = 1;
         this.color = color;
     }
-    
     drawScore()
     {
         c.save();
@@ -153,7 +153,6 @@ class FlyingScore
         this.opacity -= 0.04;
     }
 }
-
 class Bokstav
 {
     constructor({position, text})
@@ -205,22 +204,11 @@ function awake(level)
                 Math.random() * uniq_characters.length
                 )])
         }
-  
     //shuffle the letters position in the array, to make them appear randomly
     shuffleArray(text_holder); 
     generateRandomPosition();
     letterContainer();
-
-    //test
-// console.log("text_holder" + text_holder)
-// for (let index = 0; index < randomSpawnPos.length; index++) {
-// //     console.log( "level: " + level + " x: " +randomSpawnPos[index].x + "y : "+ randomSpawnPos[index].y)
-// }
-    // console.log("2 letters "+text_holder);
 }
-
-//  awake(level); // this can be called with start game btn
-
 function shuffleArray(array) {
         for (var i = array.length - 1; i > 0; i--) {
             var j = Math.floor(Math.random() * (i + 1));
@@ -229,8 +217,6 @@ function shuffleArray(array) {
             array[j] = temp;
         }
     }
-//end function
-
 // howl.js for sound system
 let sfx = {
     //sfx sounds
@@ -242,16 +228,17 @@ let sfx = {
     }),
     shootSound : new Howl({
         src:'./snd/shoot.wav',
+    }),
+    levelUp : new Howl({
+        src: './snd/levelUp.wav'
     })
 }
-let music = {
-    //background sound when click start game
-    bgSound : new Howl({
-        src: './snd/bgsound.mp3'
-    })
-}
+let bgMusic = new Howl({
+        src: './snd/bgsound.mp3',
+        loop : true
+})
 
-let player = new Player() //start game
+let player = new Player() //player instance
 
 function generateRandomPosition() {
     let length = text_holder.length; //cache the length
@@ -265,7 +252,6 @@ function generateRandomPosition() {
         xStartPos += xConstant;
     }
 }
-
 function letterContainer() {
     text_holder.forEach((bokstav, index) => {
         bokstaver.push(new Bokstav(
@@ -287,7 +273,6 @@ function init()
      particles = [];
      randomSpawnPos = []; 
      awake(level);
-     
      //to avoid stacking, recursion of animate
      if(frameLoop)
      {
@@ -296,8 +281,6 @@ function init()
      animate();
 }
 
-//consider this in init()
-//key states
 const key = {
     righKey : { isPressed : false},
     leftKey : { isPressed : false},
@@ -307,7 +290,6 @@ const key = {
 let score = 0;
 let frameLoop;
 
-//bgsound.play();
 let flyingScoreHolder = [];
 
 function animate()
@@ -483,6 +465,7 @@ function createHitLetterList(letter, isCorretLetterHit)
             key.righKey.isPressed = false;
 
             level += 1; //increent the level
+            sfx.levelUp.play();
             setTimeout(() => {
                 init();
             }, 1000);
@@ -561,11 +544,13 @@ startBtn.addEventListener('click', () =>
     scoreEl.innerHTML = score;
     livesText.innerHTML = lives;
     init();
-    if(music.bgSound.play)
+    //if the bg sound is already playing... then stop it..this is for restarting the game
+    if(bgMusic.playing())
     {
-        music.bgSound.stop();
+        bgMusic.stop();
     }
-    music.bgSound.play();
+    bgMusic.play();
+    bgMusic.loop();
     startWindow.style.display = 'none'; //disappear the window of start/end game
 })
 
