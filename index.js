@@ -7,7 +7,9 @@ const levelText = document.getElementById("levelScore");
 const startBtn = document.getElementById("startBtn");
 const startWindow = document.getElementById('startGameWindow');
 const pointStartgamePage = document.getElementById("point");
-const difficultyLevel = document.getElementById("levelDifficulty")
+const difficultyLevel = document.getElementById("levelDifficulty");
+// const optionbtn = document.getElementById("option");
+
 
 const c = canvas.getContext('2d'); // canvas context
 //canvas dimension
@@ -34,7 +36,9 @@ let randomSpawnPos = [];
 let bokstaver =[];
 let projectiles = [];
 let particles = [];
-let ySpeed = 1; //the speed of falling letters
+let ySpeed = 0.7; //the speed of falling letters
+
+// let paused = false; // pause
 
 class Player
 {
@@ -217,7 +221,7 @@ function shuffleArray(array) {
             array[j] = temp;
         }
     }
-// howl.js for sound system
+// howl.js for sound system, sound library
 let sfx = {
     //sfx sounds
     hitSound : new Howl({
@@ -294,6 +298,14 @@ let flyingScoreHolder = [];
 
 function animate()
 {
+
+    // if(paused)
+    // {
+    //     alert("game paused")
+    // }
+    // else
+    // {
+
    frameLoop = requestAnimationFrame(animate)
     {
         //black screen
@@ -345,12 +357,6 @@ function animate()
                 projectile.update();
             }
         })
-
-        //adjust speed
-       
-        // if(level > 2)
-        //     ySpeed += 2;
-
         //the bone of the game logic
         bokstaver.forEach((bokstav, bokstav_index) =>
         {
@@ -448,6 +454,7 @@ function animate()
             player.velocity.x = 0;
         }
     }
+    // }
 }
 
 let countletter_hit = 0;//counts the correct letter hit
@@ -538,6 +545,7 @@ addEventListener('keyup', (event) =>
 //when the start btn is clicked
 startBtn.addEventListener('click', () =>
 {
+    paused = false;
     level = 0;
     lives = 5;
     score = 0;
@@ -554,17 +562,21 @@ startBtn.addEventListener('click', () =>
     startWindow.style.display = 'none'; //disappear the window of start/end game
 })
 
+//difficulty level 
 difficultyLevel.addEventListener('change', () =>
 {
     switch(difficultyLevel.value)
     {
         case 'easy':
-            ySpeed = 1;
+            ySpeed = .7;
             break;
         case 'medium':
-            ySpeed = 1.5;
+            ySpeed = 1;
             break;
         case 'hard':
+            ySpeed = 1.5;
+            break;
+        case 'veryhard':
             ySpeed = 2;
             break
         default:
@@ -572,3 +584,11 @@ difficultyLevel.addEventListener('change', () =>
     }
 
 })
+
+// optionbtn.addEventListener('click', () =>
+// {
+//     if(paused)
+//         paused =false;
+//     else
+//         paused = true;
+// })
