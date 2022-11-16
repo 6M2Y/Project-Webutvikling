@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+   <!--howl.js for sound manager-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js" 
+    integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA=="
+     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+     <script src="https://kit.fontawesome.com/7a79be9aeb.js" crossorigin="anonymous"></script>
+     <link rel="stylesheet" href="style.css">
+</head>
+<body> 
+
+
+    <div id="header">
+        <div class="container">
+            <nav>
+                <li><a href="./spill.html"><img src="./bilder/logo4.png" class="logo"></a></li> 
+                <ul>
+                    <li><a href="./spill.html">Start Game</a></li>
+                    <li><a href="instructions.html">Instructions</a></li>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+
+
+    <div class="title">
+        <h1>Bokstavskytespill</h1>
+    </div>
+   
+    <div class="container-canvas">
+        <div class="top"> 
+            <div class="top-1">
+                <span>Ord: </span>
+                <div class="ord" id="ord-text"></div>
+            </div>
+            <div class="top-1">                
+                   <div><span>Rund: </span> </div> 
+                   <div id="levelScore">0 </div> 
+            </div>
+            <div class="top-1">
+                    <div><span>Liv: </span> </div>
+                    <div id="liveScore">0</div> 
+            </div>
+            <div class="top-1">
+                    <div><span>Poeng: </span> </div>
+                    <div id="scoreEl">0</div> 
+            </div>
+            <div class="top-1">
+                <button class="btn" id="option">Instilling</button>
+            </div>
+        </div>
+        <div class="canvas">
+            <canvas id="canvas"> </canvas>
+             <!--start game window-->
+            <div class="startgame" id="startGameWindow">
+                <div class="innerstartgame">
+                    <p class="pointText">Poeng</p>
+                    <h1 id="point">0</h1>
+                    <div class="difficultylvl">
+                        <div>
+                            <label for="cars">Difficulty:</label>
+                        </div>
+                        <div>
+                            <select class="select" id="levelDifficulty">
+                                <option value="easy">Easy</option>
+                                <option value="medium">Medium</option>
+                                <option value="hard">Hard</option>
+                                <option value="veryhard">Difficult</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="btns">
+                        <div>
+                            
+                            <button class="btn" id="startBtn">Start Spill</i></button>
+                        </div>
+                        <div>
+                            <button class="btn" id="exitBtn">Exit Spill</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--start game window end-->
+            
+        </div>
+    </div>
+
+    </div>
+    <script src="spill.js"></script>
+</body>
+</html>
