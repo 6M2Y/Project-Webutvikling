@@ -146,23 +146,19 @@ nav ul li a:hover::after{
 /* start game page*/
 .startgame{
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    position: fixed;
-    left: 12%;
+    justify-content: space-around;
+    left: 16%;
     right: 6%;
-    top: 0;
+    top: 6rem;
     bottom: 0;
     position: absolute;
-    width: 70%;
-
-}
-.innerstartgame
-{
+    width: 60%;
+    height: 50%;
+    border: 1px solid #080808;
+    padding: 1rem;
     background: #e9c46a;
-    padding: 2rem;
-    width: 70%;
-    text-align: center;
 }
 .point
 {
