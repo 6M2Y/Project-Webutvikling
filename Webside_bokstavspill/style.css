@@ -212,3 +212,66 @@ nav ul li a:hover::after{
     position: relative;
     background-color: #a7a3a1;
 }
+
+/**kreditering**/
+.kreditering
+{
+    display:flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items: center;
+    margin: auto;
+}
+.kreditering .title
+{
+    padding: 2rem;
+}
+
+.kreditering table
+{
+    width: 50%;
+    height: 50%;
+    border: 1px solid rgb(25, 21, 21);
+    border-collapse: collapse;
+}
+th
+{
+    background-color: #131c1c;
+    font-size: 40px;
+    padding: 30px;
+}
+td {
+    background-color: #131c1c;
+    font-size: 22px;
+    padding: 25px;
+  }
+
+  /***footer**/
+  .footer {
+	background-color: #333;
+	color: #ffffff;
+	text-align: left;
+	padding: 20px 30px;
+	font-size: 0.8em;
+
+}
+
+.footer-li {
+	list-style: none;
+	padding-left:0;
+	display: block;
+}
+
+.footer-link {
+	color: #ffffff;
+	margin-left: 5px;
+}
+
+.footer-links {
+	padding-left: 0px;
+}
+
+.footer-link:hover {
+	color: #ffffff;
+	cursor: pointer;
+}
